@@ -1,0 +1,138 @@
+Name: Karenzi Mucyo David
+RegN: 222021192
+
+
+Question 1.
+Write a Script that takes a directory from the command line  and displays the number of files in the Directory
+(#!/bin/bash
+
+# Check if the directory exists
+if [ -d "$1" ]; then
+    # Count the number of files in the directory
+    num_files=$(ls -l "$1" | wc -l)
+    echo "The directory $1 contains $num_files files."
+else
+    echo "The directory $1 does not exist."
+Fi )
+Sure, here’s a breakdown of what each line in the script does:
+#!/bin/bash
+This is called a shebang. It tells the system that this script should be executed using the bash shell.
+if [ -d "$1" ]; then
+This is an if statement that checks if the first argument passed to the script ($1) is a directory (-d). If it is, then the code inside the if statement will be executed.
+num_files=$(ls -l "$1" | wc -l)
+This line uses the ls -l command to list the contents of the directory, and then pipes (|) that output to the wc -l command, which counts the number of lines. The result is stored in the num_files variable.
+echo "The directory $1 contains $num_files files."
+This line prints a message to the console with the name of the directory ($1) and the number of files ($num_files).
+else
+    echo "The directory $1 does not exist."
+fi
+If the directory does not exist, the script will print a message saying so. The fi keyword signifies the end of the if statement.
+This script is a simple way to count the number of files in a directory from the command line. It’s worth noting that this will count all types of files, including directories and hidden files. If you want to count only regular files, or exclude hidden files, the script would need to be modified. Let me know if you need help with that!
+QUESTION2
+Rewrite the Script to count only subdirectories , not normal files
+#!/bin/bash
+# Check if directory exists
+if [ -d "$1" ]
+then
+  # Count the number of subdirectories in the directory
+  subdir_count=$(ls -l $1 | grep "^d" | wc -l)
+  echo "The directory $1 contains $subdir_count subdirectories."
+else
+  echo "Directory does not exist."
+fi
+You can run these scripts by saving them to a file, giving the file execute permissions with chmod +x filename, and then running them with ./filename directoryname. Please replace filename with the name you choose for the script file, and directoryname with the name of the directory you want to check. Remember to be in the correct directory when running these commands or provide the full path to the files/directories. These scripts are written for a Unix-like operating system, such as Linux
+
+
+QUESTION 3
+Write Script that prompts the user for his name and age and greats him : Hello [name], are you really [age] years old ?
+Sure, here is a simple BASH script that does exactly that:
+#!/bin/bash
+
+# Prompt the user for their name
+echo "Please enter your name:"
+read name
+
+# Prompt the user for their age
+echo "Please enter your age:"
+read age
+
+# Greet the user
+echo "Hello $name, are you really $age years old?"
+To run this script, save it to a file, give it execute permissions with chmod +x filename, and then run it with ./filename. It will prompt you for your name and age, and then greet you accordingly. Please replace filename with the actual name of the file you saved the script to.
+QUESTION4
+Write a Shell script takes 3 text files as command line arguments and displays the biggest and the smallest files.
+#!/bin/bash
+
+# Check if exactly 3 arguments are passed
+if [ $# -ne 3 ]; then
+    echo "Please provide exactly 3 files."
+    exit 1
+fi
+
+# Initialize min and max to the first file
+min=$1
+max=$1
+
+# Loop through all arguments
+for file in "$@"
+do
+    # If the file does not exist
+    if [ ! -f "$file" ]; then
+        echo "$file does not exist."
+        exit 1
+    fi
+
+    # If the current file is smaller
+    if [ $(stat -c%s "$file") -lt $(stat -c%s "$min") ]; then
+        min=$file
+    fi
+
+    # If the current file is bigger
+    if [ $(stat -c%s "$file") -gt $(stat -c%s "$max") ]; then
+        max=$file
+    fi
+done
+
+echo "The smallest file is $min"
+echo "The biggest file is $max"
+This script uses the stat command to get the size of a file and compares it with the current smallest and biggest files. If a smaller or bigger file is found, it updates the min and max variables respectively. At the end, it prints out the smallest and biggest files.
+Please note that this script works on Unix-like systems and requires that the stat command is available. Also, it compares files based on their sizes, not the number of lines or characters. If two or more files have the same size, it will output the one that was encountered first. If you want to compare files based on other criteria, you may need to modify the script accordingly.
+To run the script, save it to a file, give it execute permissions with chmod +x filename, and then run it with ./filename file1 file2 file3. Replace filename with the name you saved the script as, and file1, file2, and file3 with the names of the files you want to compare.
+QUESTION 5
+Write a Script that takes a text file as input and creates another text files named "anser.txt", that contains all the lines containing the word "but".
+
+#!/bin/bash
+
+# Input file
+input_file="your_file.txt"
+
+# Output file
+output_file="answer.txt"
+
+# Use grep to find lines containing "but"
+grep "but" $input_file > $output_file
+Please replace 'your_file.txt' with the name of your input file. This script assumes that the input file is in the same directory as the script. If it’s in a different directory, you’ll need to provide the full path to the file. Also, the script is case-sensitive. If you want it to be case-insensitive, you can change the grep command to grep -i "but" $input_file > $output_file.
+QUESTION 6
+Write a Script takes a folder as command line argument and displays the number of files in that folder and all its sub -folders. Count only files not folders.
+
+Here is a simple BASH script that takes a directory as a command-line argument and recursively counts the number of files in that directory and all its subdirectories. Note that this script only counts files, not directories.
+#!/bin/bash
+
+# Check if argument is provided
+if [ "$#" -ne 1 ]; then
+    echo "Usage: $0 <directory>"
+    exit 1
+fi
+
+# Check if argument is a directory
+if [ ! -d "$1" ]; then
+    echo "Error: $1 is not a directory"
+    exit 1
+fi
+
+# Count the files
+num_files=$(find "$1" -type f | wc -l)
+
+echo "The directory $1 contains $num_files files"
+To run this script, save it to a file (for example, count_files.sh), give it execute permissions with chmod +x count_files.sh, and then run it with your directory as an argument, like so: ./count_files.sh /path/to/your/directory.
+Please replace /path/to/your/directory with the actual path of your directory. This script will then print the number of files in that directory and all its subdirectories. Please note that this script only counts regular files, not directories or other types of special files. If the provided argument is not a directory, the script will print an error message and exit. If no argument is provided, the script will print a usage message and exit. Please ensure that you have the necessary permissions to read the directory and its contents. If you do not have the necessary permissions, the script may not work as expected. Also, please note that this script does not follow symbolic links. If you want to count files pointed to by symbolic links,
